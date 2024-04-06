@@ -3,9 +3,15 @@ import { Request, Response } from "express";
 import { dataHero } from "src/utils/data-hero";
 import { CreateHeroDto } from "./dto/create-hero.dto";
 import { UpdateHeroDto } from "./dto/update-hero.dto";
+import { HeroService } from "./hero.service";
 
 @Controller("hero")
 export class HeroController{
+
+    constructor(private heroService: HeroService){
+
+    }
+
     @Get("index")
     index(@Res() res: Response) {
         try {
@@ -14,7 +20,7 @@ export class HeroController{
                     status: true,
                     message: 'berhasil akses',
                     title: 'hero index',
-                    data: dataHero
+                    data: this.heroService.findAll()
                 }
             )
         } catch (error) {
@@ -27,7 +33,7 @@ export class HeroController{
             )
         }
     }
-    
+
     @Post('store')
     store(@Req() req: Request, @Body() createHeroDto: CreateHeroDto, @Res() res: Response){
         // console.log(req)
@@ -57,14 +63,14 @@ export class HeroController{
                 const dataHeroReq = {
                     id, name, type, image
                 }
-                dataHero.push(dataHeroReq)
+                this.heroService.create(dataHeroReq)
                 return res.status(200).json({
                     status: true,
                     message: {
                         title: 'berhasil membuat data',
                         data: dataHeroReq
                     },
-                    data: dataHero
+                    data: this.heroService.findAll()
                 })
             }
             
@@ -82,7 +88,7 @@ export class HeroController{
     @Put('update/:id')
     update(@Param('id') id: number, @Body() updateHeroDto: UpdateHeroDto , @Res() res: Response){
         try {
-            const index = dataHero.findIndex((item) => Number(item.id) === Number(id))
+            const index = this.heroService.findAll()?.findIndex((item) => Number(item.id) === Number(id))
             if(index === -1){
                 return res.status(404).json({
                     status: false,
@@ -96,13 +102,13 @@ export class HeroController{
                 ...updateHeroDto,
             };
             
-            dataHero[index] = updatedHero;
+            this.heroService.findAll()[index] = updatedHero;
 
             return res.status(200).json({
                 status: true,
                 message: 'Data hero updated successfully',
-                data: dataHero[index],
-                fulldata: dataHero
+                data: this.heroService.findAll()[index],
+                fulldata: this.heroService.findAll()
             })
         } catch (error) {
             return res.status(500).json({
@@ -116,7 +122,7 @@ export class HeroController{
     @Get('detail/:id')
     show(@Param() params, @Res() res: Response){
         const { id } = params
-        const result = dataHero?.find((item)=>Number(item.id) === Number(id))
+        const result = this.heroService.findAll()?.find((item)=>Number(item.id) === Number(id))
         // console.log(result)
         return res.status(200).json({
             id: id,
@@ -126,10 +132,9 @@ export class HeroController{
 
     @Delete('delete/:id')
     destroy(@Param('id') id: number, @Res() res: Response){
-        const heroUpdate = dataHero.filter((item)=>Number(item.id) !== Number(id))
+        this.heroService.delete(id)
         return res.status(200).json({
             message: `data dengan id ${id} berhasil dihapus`,
-            data: heroUpdate
         })
         
     }
