@@ -1,0 +1,13 @@
+install prisma with npm install prisma --save-dev
+
+di terminal tulis npx prisma init
+
+setup env connection
+
+tulis dan buat model di schema prisma file
+
+pastikan mysql jalan dan env nya udh bener
+
+migrate dengan perintah npx prisma migrate dev --name init
+
+jalanin prisma studio dengan perintah npx prisma studio
