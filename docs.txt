@@ -11,3 +11,12 @@ pastikan mysql jalan dan env nya udh bener
 migrate dengan perintah npx prisma migrate dev --name init
 
 jalanin prisma studio dengan perintah npx prisma studio
+
+===== next step
+
+install prisma client `npm install @prisma/client`
+
+menghubungkan dengan prisma service dengan membuat file prisma.service.ts diluar
+
+koneksikan pada module nya pada atribute providers
+
