@@ -20,3 +20,15 @@ menghubungkan dengan prisma service dengan membuat file prisma.service.ts diluar
 
 koneksikan pada module nya pada atribute providers
 
+
+=====--========
+Membuat authentication + JWT
+===============
+
+di terminal jalankan
+$ nest g module auth
+$ nest g controller auth
+$ nest g service auth
+
+npm install --save @nestjs/jwt
+

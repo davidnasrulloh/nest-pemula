@@ -8,7 +8,7 @@ import { Response } from 'express';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
+  @Post('register')
   async create(@Body() dto: CreateUserDto,@Res() res: Response) {
     try {
       const newUser = await this.userService.register(dto);
